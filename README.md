@@ -15,5 +15,5 @@
 
 <br/>
 <p align="center">
-        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/minions/main/static/systemsdesign.png?token=ANKI23MAB4VKWDFXDDWZGE3BRX6FI" alt="Parsec logo">
+        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/minions/main/static/systemsdia.png?token=ANKI23IIL7UCY6N7I3DZUNLBSBTNG" alt="Parsec logo">
 </p>
