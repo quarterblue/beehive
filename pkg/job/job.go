@@ -22,31 +22,35 @@ type Job interface {
 
 type DockerJob struct {
 	// Global unique ID to identify a docker job
-	ID uuid.UUID
-
-	Name string
-
-	State State
-
-	Image string
-
-	Owner string
-
-	Memory int
-
-	Disk int
-
-	Priority int
-
-	Container string
-
-	RestartPolicy string
-
-	Arguments string
-
+	ID         uuid.UUID
+	Name       string
+	State      State
+	Owner      string
 	CreateTime time.Time
-
-	StartTime time.Time
-
+	StartTime  time.Time
 	FinishTime time.Time
+}
+
+type JobEvent struct {
+	ID        uuid.UUID
+	State     State
+	Timestamp time.Time
+	DockerJob DockerJob
+}
+
+type Config struct {
+	Name          string
+	Cmd           []string
+	Image         string
+	Memory        int
+	Disk          int
+	Priority      int
+	Container     string
+	RestartPolicy string
+	Arguments     string
+}
+
+type DockerContainer struct {
+	Config      Config
+	ContainerId string
 }

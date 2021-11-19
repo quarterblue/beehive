@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Welcome to Minions Job Scheduler")
+	fmt.Println("Welcome to beehive Job Scheduler")
 	ctx := context.Background()
 
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())

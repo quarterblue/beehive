@@ -1,4 +1,4 @@
-module github.com/quarterblue/minions
+module github.com/quarterblue/beehive
 
 go 1.17
 
