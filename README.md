@@ -1,10 +1,10 @@
-# minions
+# beehive
 
 ## About
 
 ## Features
 
-- Cron based
+- Cron based scheduler
 - Docker containerized jobs
 - Distributed workers
 - Full and Rich UI interface
