@@ -118,9 +118,9 @@ cdb_node_1:
 Dispatcher
 
 ```yml
-rabbitmq:
-  image: rabbitmq:3-management-alpine
-  container_name: 'rabbitmq'
+dispatcher:
+  image: ./pkg/dispatcher
+  container_name: 'dispatcher'
 ```
 
 > Provide the microservice that dispatches container jobs to worker bees.
@@ -128,9 +128,9 @@ rabbitmq:
 Updater
 
 ```yml
-rabbitmq:
-  image: rabbitmq:3-management-alpine
-  container_name: 'rabbitmq'
+updater:
+  image: ./pkg/updater
+  container_name: 'updater'
 ```
 
 > Provide the microservice that pulls updates from worker bees and commits to the DB.
@@ -139,8 +139,8 @@ Worker Bee
 
 ```yml
 workerbee:
-  image: rabbitmq:3-management-alpine
-  container_name: 'rabbitmq'
+  image: ./pkg/worker
+  container_name: 'workerbee'
 ```
 
 > Provide the individual worker nodes most on virtual machines.
