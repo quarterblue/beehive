@@ -19,7 +19,7 @@
 ## Systems Architecture
 
 <p align="center">
-        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/main/static/systemsdia.png?token=ANKI23IJNRFDSPP33ZFQWKLBUQOZE" alt="Parsec logo">
+        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/main/static/systemdesign.png?token=ANKI23P3JCBFK4XKVFX7DPLBUSKMC" alt="Parsec logo">
 </p>
 
 ## Quick start
