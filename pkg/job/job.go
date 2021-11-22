@@ -1,8 +1,14 @@
 package job
 
 import (
+	"context"
+	"io"
+	"log"
+	"os"
 	"time"
 
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/client"
 	"github.com/google/uuid"
 )
 
@@ -51,6 +57,28 @@ type Config struct {
 }
 
 type DockerContainer struct {
+	Client      *client.Client
 	Config      Config
 	ContainerId string
+}
+
+func (d *DockerContainer) Run() Result {
+	ctx := context.Background()
+	reader, err := d.Client.ImagePull(
+		ctx, d.Config.Image, types.ImagePullOptions{})
+	if err != nil {
+		log.Printf("Error pulling images")
+		return Result{Error: err}
+	}
+	io.Copy(os.Stdout, reader)
+	return Result{
+		Error:  nil,
+		Status: "Finished",
+	}
+}
+
+type Result struct {
+	Error  error
+	Name   string
+	Status string
 }
