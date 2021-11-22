@@ -7,7 +7,7 @@
 
 
 
-## ✨ Features
+## Features
 
 - Repeatable, cron based job scheduler
 - Docker containerized jobs
@@ -16,13 +16,13 @@
 - Horizontally Scalable to hundreds of nodes
 - Fault tolerant worker architecture*
 
-## 🗼 Systems Architecture
+## Systems Architecture
 
 <p align="center">
         <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/main/static/systemsdia.png?token=ANKI23IJNRFDSPP33ZFQWKLBUQOZE" alt="Parsec logo">
 </p>
 
-## ⚡️ Quick start
+## Quick start
 
 ### 🦖 Starting Coordinator
 
@@ -73,7 +73,7 @@ $ docker-compose -f docker-compose-bee-cdb.yml up -d
 
 That's all you need to know to start! 🎉
 
-## 🐳 Docker Components
+## Docker Components
 
 Frontend
 
@@ -146,5 +146,5 @@ workerbee:
 > Provide the individual worker nodes most on virtual machines.
 
 
-## 📖 License
+## License
 Beehive is a free and open-source software licensed under the MIT License.
