@@ -23,6 +23,8 @@
         <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/main/static/systemdesign.png?token=ANKI23P3JCBFK4XKVFX7DPLBUSKMC" alt="Parsec logo">
 </p>
 
+<b><a href="https://github.com/quarterblue/pulse">*Pulse<a></b>: is a hybrid failure detector library
+
 ## Quick start
 
 ### 🦖 Starting Coordinator
