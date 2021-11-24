@@ -2,10 +2,10 @@
 <!--   <img src="https://raw.githubusercontent.com/create-go-app/cli/master/.github/images/cgapp_logo%402x.png" width="224px"/><br/> -->
   beehive
 </h1>
-<p><a href="https://github.com/quarterblue/beehive/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.0.1-blue?style=for-the-badge&logo=none" alt="cli version" /></a>&nbsp;<a href="https://pkg.go.dev/github.com/quarterblue/beehive/v1?tab=doc" target="_blank"><img src="https://img.shields.io/badge/Go-1.17+-00ADD8?style=for-the-badge&logo=go" alt="go version" /></a>&nbsp;<a href="https://gocover.io/github.com/quarterblue/beehive/pkg/app" target="_blank"><img src="https://img.shields.io/badge/Go_Cover-95.0%25-success?style=for-the-badge&logo=none" alt="go cover" /></a>&nbsp;<a href="https://goreportcard.com/report/github.com/quarterblue/beehive" target="_blank"><img src="https://img.shields.io/badge/Go_report-A+-success?style=for-the-badge&logo=none" alt="go report" /></a>&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=for-the-badge&logo=none" alt="license" /></p>
+<p><a href="https://github.com/quarterblue/beehive/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.0.1-blue?style=for-the-badge&logo=none" alt="cli version" /></a>&nbsp;<a href="https://pkg.go.dev/github.com/quarterblue/beehive/v1?tab=doc" target="_blank"><img src="https://img.shields.io/badge/Go-1.17+-00ADD8?style=for-the-badge&logo=go" alt="go version" /></a>&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=for-the-badge&logo=none" alt="license" /></p>
 <p>Distribute hundreds of repeatable and periodic <b>cron based jobs</b> over multiple worker nodes by encapsulating jobs in <b>Docker Containers</b>. Coordinate worker nodes to redistribute work in case of crash failures. At-least-once-semnatics guarantee for all jobs scheduled using beautiful and rich frontend UI.</p>
 
-🚧 The project is in <b>early development</b>, expect bugs, safety issues, and components that don't work 
+🚧 The project is a <b>work in progress</b>, expect bugs, safety issues, and components that don't work. Refer to Todo list for progress.
 
 
 ## Features
