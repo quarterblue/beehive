@@ -3,13 +3,14 @@ package coordinator
 import (
 	"sync"
 
-	"github.com/quarterblue/beehive/pkg/job"
-	"github.com/quarterblue/beehive/pkg/node"
+	"github.com/quarterblue/beehive/internal/job"
+	"github.com/quarterblue/beehive/internal/node"
 )
 
 type Config struct {
 	Name string
 }
+
 type Coordinator struct {
 	sync.RWMutex
 	Config   Config

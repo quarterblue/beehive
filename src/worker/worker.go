@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/quarterblue/beehive/pkg/job"
+	"github.com/quarterblue/beehive/internal/job"
 )
 
 type Worker struct {

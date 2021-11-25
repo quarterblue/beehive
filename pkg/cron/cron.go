@@ -1,5 +1,0 @@
-package cron
-
-func cron() {
-
-}
