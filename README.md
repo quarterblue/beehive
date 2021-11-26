@@ -3,7 +3,7 @@
   beehive
 </h1>
 <p><a href="https://github.com/quarterblue/beehive/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.0.1-blue?style=for-the-badge&logo=none" alt="cli version" /></a>&nbsp;<a href="https://pkg.go.dev/github.com/quarterblue/beehive/v1?tab=doc" target="_blank"><img src="https://img.shields.io/badge/Go-1.17+-00ADD8?style=for-the-badge&logo=go" alt="go version" /></a>&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=for-the-badge&logo=none" alt="license" /></p>
-<p>Distribute hundreds of repeatable and periodic <b>cron based jobs</b> over multiple worker nodes by encapsulating jobs in <b>Docker Containers</b>. Coordinate worker nodes to redistribute work in case of crash failures. At-least-once-semnatics guarantee for all jobs scheduled using beautiful and rich frontend UI.</p>
+<p>Distribute hundreds of repeatable and periodic <b>cron based jobs</b> over multiple worker nodes by encapsulating jobs in <b>Docker Containers</b>. Coordinate worker nodes to redistribute work in case of crash failures. At-least-once-semnatics guarantee for all jobs scheduled using <b>beautiful and rich frontend UI</b>.</p>
 
 🚧 The project is a <b>work in progress</b>, expect bugs, safety issues, and components that don't work. Refer to Todo list for progress.
 
@@ -75,6 +75,20 @@ $ docker-compose -f docker-compose-bee-cdb.yml up -d
 ```
 
 That's all you need to know to start! 🎉
+  
+## Project Progress
+  
+- [ ] Frontend UI
+- [x] Coordinator Node REST api
+- [x] Job Scheduler
+- [x] Job Load Balancer
+- [x] Partial cron parsing
+- [ ] Fully featured cron parsing
+- [x] Worker nodes job schedueling
+- [ ] Pulse FD fully integrated
+- [ ] Propogate observable statistics
+- [ ] Updater and job reschedueling
+
 
 ## Docker Components
 
