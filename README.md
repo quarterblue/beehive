@@ -92,21 +92,21 @@ Coordinator
 
 ```yml
 coordinator:
-  build: ./pkg/coordinator
+  build: ./src/coordinator
   container_name: 'coordinator'
 ```
 
-> Provide the user interface in the form of single page application created in VueJS.
+> Provide coordinator node with REST API that schedules & (re)distributes jobs.
 
-RabbitMQ
+Kafka
 
 ```yml
-rabbitmq:
-  image: rabbitmq:3-management-alpine
-  container_name: 'rabbitmq'
+kafka:
+  image: confluentinc/cp-zookeeper:latest
+  container_name: 'kafka'
 ```
 
-> Provide the message queue protocol to communicate between worker bees and updater.
+> Provide the kafka topic queue to communicate between worker bees and updater.
 
 Cockroach DB Clusters
 
@@ -118,21 +118,11 @@ cdb_node_1:
 
 > Provide the DB cluster distributed over multiple nodes.
 
-Dispatcher
-
-```yml
-dispatcher:
-  image: ./pkg/dispatcher
-  container_name: 'dispatcher'
-```
-
-> Provide the microservice that dispatches container jobs to worker bees.
-
 Updater
 
 ```yml
 updater:
-  image: ./pkg/updater
+  image: ./src/updater
   container_name: 'updater'
 ```
 
@@ -142,11 +132,11 @@ Worker Bee
 
 ```yml
 workerbee:
-  image: ./pkg/worker
+  image: ./src/worker
   container_name: 'workerbee'
 ```
 
-> Provide the individual worker nodes most on virtual machines.
+> Provide the individual worker nodes on commodity hardware (or cloud virtual machine).
 
 
 ## License
