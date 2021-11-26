@@ -3,8 +3,8 @@ package coordinator
 type Strategy int
 
 const (
-	RoundRobin Strategy = iota
-	LeastConnection
+	WeightedRoundRobin Strategy = iota
+	LeastUtilized
 	LeastResponseTime
 	ConsistentHash
 )
@@ -17,11 +17,11 @@ func NewScheduler(strategy Strategy) {
 
 }
 
-func StrategyRR() {
+func StrategyWRR() {
 
 }
 
-func StrategyLC() {
+func StrategyLU() {
 
 }
 
