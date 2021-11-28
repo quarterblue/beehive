@@ -1,42 +1,45 @@
 version: '3.9'
 
 services:
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq'
+  #   rabbitmq:
+  #     image: rabbitmq:3-management-alpine
+  #     container_name: 'rabbitmq'
+  #     ports:
+  #       - 5672:5672
+  #       - 15672:15672
+  #     volumes:
+  #       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+  #       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+  #     networks:
+  #       - rabbitmq_go_net
+
+  crdb_node_1:
+    container_name: crdb_node_1
+    image: cockroachdb/cockroach:latest
+    volumes:
+      - ./data/node_1:/cockroach/cockroach-data
+    # command: start --insecure
+    command: start-single-node --insecure
     ports:
-      - 5672:5672
-      - 15672:15672
-    volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      - "26257:26257"
+      - "8080:8080"
     networks:
-      - rabbitmq_go_net
-
-  cdb_node_1:
-    container_name: cdb_node_1
-    image: cockroachdb/cockraoch:latest
-    volumes:
-      - ./data/cdb_node_1:/cockroach/cockroach-data
-    command: start --insecure
-    networks:
-      cockroachdb_net:
+      network_cockroachdb:
         aliases:
-          - cdb_node_1
-
-  cdb_node_2:
-    container_name: cdb_node_2
-    image: cockroachdb/cockraoch:latest
-    volumes:
-      - ./data/cdb_node_2:/cockroach/cockroach-data
-    command: start --insecure
-    networks:
-      cockroachdb_net:
-        aliases:
-          - cdb_node_2
+          - crdb_node_1
+  # crdb_node_2:
+  #   container_name: crdb_node_2
+  #   image: cockroachdb/cockroach:latest
+  #   volumes:
+  #     - ./data/node_2:/cockroach/cockroach-data
+  #   command: start --insecure --join=crdb_node_1
+  #   networks:
+  #     network_cockroachdb:
+  #       aliases:
+  #         - crdb_node_2
 
 networks:
-  rabbitmq_go_net:
+  network_cockroachdb:
     driver: bridge
-  cockraochdb_net:
-    driver: bridge
+  # rabbitmq_go_net:
+  #   driver: bridge

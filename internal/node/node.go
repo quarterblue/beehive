@@ -1,12 +1,8 @@
 package node
 
-import (
-	"github.com/google/uuid"
-)
-
 // Represents the node specification
 type Node struct {
-	ID       uuid.UUID
+	ID       string
 	Name     string
 	IpAddr   string
 	Port     string
@@ -15,6 +11,8 @@ type Node struct {
 }
 
 // The machine specification
+// This information is retrieved when a node is first initialized
+// We use this information to dynamically load balance jobs to appropriate nodes
 type Spec struct {
 	CPUmodel   string
 	CPUmhz     float64

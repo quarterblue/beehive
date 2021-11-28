@@ -15,6 +15,7 @@ import ( // "archive/tar"
 	"fmt"
 	"log"
 
+	"github.com/quarterblue/beehive/services/coordinator/api"
 	"github.com/quarterblue/beehive/services/worker"
 	"github.com/quarterblue/beehive/services/worker/pb"
 )
@@ -33,6 +34,8 @@ func main() {
 	// fmt.Println(node)
 
 	fmt.Println(pbr)
+
+	api.Server()
 	// fmt.Println("Welcome to beehive Job Scheduler")
 	// ctx := context.Background()
 

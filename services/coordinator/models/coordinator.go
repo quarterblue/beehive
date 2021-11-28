@@ -17,7 +17,8 @@ const (
 )
 
 type Config struct {
-	Name string
+	Name     string
+	Strategy Strategy
 }
 
 // Coordinator
@@ -27,8 +28,19 @@ type Coordinator struct {
 	nodeManager Manager
 }
 
-func NewNodeManager(strategy Strategy) *Manager {
-	return nil
+func NewNodeManager(strategy Strategy) Manager {
+	switch strategy {
+	case WeightedRoundRobin:
+		return &WRoundRobin{}
+	case RoundRobin:
+		return &SRoundRobin{}
+	case LeastJobs:
+		return &LJobs{}
+	case ConsistentHashing:
+		return &CHash{}
+	default:
+		return nil
+	}
 }
 
 func NewCoordinator(cfg Config) *Coordinator {
@@ -46,12 +58,19 @@ func (c *Coordinator) AddNode(node *node.Node) error {
 	return nil
 }
 
-func (c *Coordinator) EditNode() error {
-	return nil
+func (c *Coordinator) EditNode(node *node.Node) error {
+	c.mu.Lock()
+	err := c.nodeManager.Edit(node)
+	c.mu.Unlock()
+
+	return err
 }
 
-func (c *Coordinator) RemoveNode() error {
-	return nil
+func (c *Coordinator) RemoveNode(node *node.Node) error {
+	c.mu.Lock()
+	err := c.nodeManager.Remove(node)
+	c.mu.Unlock()
+	return err
 }
 
 func (c *Coordinator) AddNodesFromConfig() error {

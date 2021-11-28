@@ -1,7 +1,15 @@
 package updater
 
-import "fmt"
+type Updater struct {
+	jobCount uint64
+}
 
-func update() {
-	fmt.Println("Update")
+func NewUpdater() *Updater {
+	return &Updater{
+		jobCount: 0,
+	}
+}
+
+func (u *Updater) JobUpdate() {
+
 }

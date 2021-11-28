@@ -1,37 +1,23 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
-// func rateLimit(c *gin.Context) {
-// 	ip := c.ClientIP()
-// 	value := int(ips.Add(ip, 1))
-// 	if value%50 == 0 {
-// 		fmt.Printf("ip: %s, count: %d\n", ip, value)
-// 	}
-// 	if value >= 200 {
-// 		if value%200 == 0 {
-// 			fmt.Println("ip blocked")
-// 		}
-// 		c.Abort()
-// 		c.String(http.StatusServiceUnavailable, "rate limited")
-// 	}
+func (app *application) routes() *httprouter.Router {
+	// Initialize a new httprouter router instance.
+	router := httprouter.New()
 
-// }
+	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthcheckHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/jobs", app.createJobHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/jobs/:id", app.showJobHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/nodes", app.createNodeHandler)
+	router.HandlerFunc(http.MethodPut, "/v1/nodes/:id", app.editNodeHandler)
+	router.HandlerFunc(http.MethodGet, "/v1/nodes/:id", app.showNodeHandler)
+	router.HandlerFunc(http.MethodDelete, "/v1/nodes/:id", app.deleteNodeHandler)
 
-func index(c *gin.Context) {
-
-}
-
-func jobGETALL(c *gin.Context) {
-}
-
-func jobGETONE(c *gin.Context) {
-}
-
-func jobCREATE(c *gin.Context) {
-}
-
-func jobDELETE(c *gin.Context) {
+	// Return the httprouter instance.
+	return router
 }
