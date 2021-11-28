@@ -1,7 +1,6 @@
 package main
 
-import (
-	// "archive/tar"
+import ( // "archive/tar"
 	// "bytes"
 	// "context"
 	// "fmt"
@@ -9,18 +8,31 @@ import (
 	// "io/ioutil"
 	// "log"
 	// "os"
-
 	// "github.com/docker/docker/api/types"
 	// "github.com/docker/docker/client"
-	"fmt"
 
-	"github.com/quarterblue/beehive/internal/node"
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/quarterblue/beehive/services/worker"
+	"github.com/quarterblue/beehive/services/worker/pb"
 )
 
 func main() {
 
-	node := node.NewNode("name", "ip", "port")
-	fmt.Println(node)
+	worker := worker.NewWorker("123", "testpc")
+
+	ctx := context.Background()
+	pbr, err := worker.MachineSpec(ctx, &pb.SpecRequest{})
+
+	if err != nil {
+		log.Println(err)
+	}
+	// node := node.NewNode("name", "ip", "port")
+	// fmt.Println(node)
+
+	fmt.Println(pbr)
 	// fmt.Println("Welcome to beehive Job Scheduler")
 	// ctx := context.Background()
 

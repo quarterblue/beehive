@@ -1,0 +1,5 @@
+package coordinator
+
+func specGrpc() {
+
+}

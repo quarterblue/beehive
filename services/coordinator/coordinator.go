@@ -7,20 +7,42 @@ import (
 	"github.com/quarterblue/beehive/internal/node"
 )
 
+type Strategy int
+
+const (
+	WeightedRoundRobin Strategy = iota
+	RoundRobin
+	LeastJobs
+	ConsistentHashing
+)
+
 type Config struct {
 	Name string
 }
 
+// Coordinator
 type Coordinator struct {
-	sync.RWMutex
-	Config   Config
-	NodeList []*node.Node
+	mu          sync.RWMutex
+	config      Config
+	nodeManager Manager
+}
+
+func NewNodeManager(strategy Strategy) *Manager {
+	return nil
+}
+
+func NewCoordinator(cfg Config) *Coordinator {
+	return &Coordinator{
+		mu:          sync.RWMutex{},
+		config:      cfg,
+		nodeManager: nil,
+	}
 }
 
 func (c *Coordinator) AddNode(node *node.Node) error {
-	c.Lock()
-	c.NodeList = append(c.NodeList, node)
-	c.Unlock()
+	c.mu.Lock()
+	c.nodeManager.Add(node)
+	c.mu.Unlock()
 	return nil
 }
 
@@ -32,7 +54,7 @@ func (c *Coordinator) RemoveNode() error {
 	return nil
 }
 
-func (c *Coordinator) AddNodeFromConfig() error {
+func (c *Coordinator) AddNodesFromConfig() error {
 	return nil
 }
 

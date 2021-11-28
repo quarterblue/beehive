@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package pb;
+
+message SpecRequest {
+	string specs = 1;
+}
+
+message SpecResponse {
+	string CPUmodel = 1;
+	double CPUmhz = 2;
+	uint64 CPUcore = 3;
+	uint64 Memory = 4;
+	uint64 MemoryFree = 5;
+	uint64 Disk = 6;
+	uint64 DiskFree = 7;
+	string OS = 8;
+	string Platform = 9;
+	string KernelArch = 10;
+	string Hostname = 11;
+	uint64 Uptime = 12;
+	uint64 BootTime = 13;
+}
+
+service SpecService {
+	rpc MachineSpec(SpecRequest) returns (SpecResponse);
+}
