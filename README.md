@@ -3,7 +3,7 @@
   beehive
 </h1>
 <p><a href="https://github.com/quarterblue/beehive/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.0.1-blue?style=flat-square&logo=none" alt="cli version" /></a>&nbsp;<a href="https://pkg.go.dev/github.com/quarterblue/beehive/v1?tab=doc" target="_blank"><img src="https://img.shields.io/badge/Go-1.17+-00ADD8?style=flat-square&logo=go" alt="go version" /></a>&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=flat-square&logo=none" alt="license" /></p>
-<p>Distribute hundreds of repeatable and periodic <b>cron based jobs</b> over multiple worker nodes by encapsulating jobs in <b>Docker Containers</b>. Coordinate worker nodes to redistribute work in case of crash failures. At-least-once-semnatics guarantee for all jobs scheduled using <b>beautiful and rich frontend UI</b>.</p>
+<p>Distribute repeatable and periodic <b>cron based jobs</b> over hundreds of worker nodes by encapsulating jobs in <b>Docker Containers</b>. Coordinate worker nodes to redistribute work in case of crash failures. At-least-once-semnatics guarantee for all jobs scheduled using <b>beautiful and rich frontend UI</b>.</p>
 
 🚧 The project is a <b>work in progress</b>, expect bugs, safety issues, and components that don't work. Refer to Todo list for progress.
 
@@ -100,13 +100,13 @@ frontend:
   container_name: 'frontend'
 ```
 
-> Provide the user interface in forms of SPA application created in VueJS.
+> Provide the user interface in forms of SPA created in VueJS.
 
 Coordinator
 
 ```yml
 coordinator:
-  build: ./src/coordinator
+  build: ./services/coordinator
   container_name: 'coordinator'
 ```
 
@@ -120,13 +120,13 @@ kafka:
   container_name: 'kafka'
 ```
 
-> Provide the kafka topic queue to communicate between worker bees and updater.
+> Provide the kafka topic queue to communicate between worker bees and the updater.
 
 Cockroach DB Clusters
 
 ```yml
-cdb_node_1:
-  container_name: cdb_node_1
+crdb_node_1:
+  container_name: crdb_node_1
   image: cockroachdb/cockraoch:latest
 ```
 
@@ -136,7 +136,7 @@ Updater
 
 ```yml
 updater:
-  image: ./src/updater
+  image: ./services/updater
   container_name: 'updater'
 ```
 
@@ -146,11 +146,11 @@ Worker Bee
 
 ```yml
 workerbee:
-  image: ./src/worker
+  image: ./services/worker
   container_name: 'workerbee'
 ```
 
-> Provide the individual worker nodes on commodity hardware (or cloud virtual machine).
+> Provide the individual worker nodes run on commodity hardware (or cloud virtual machine).
 
 
 ## License
