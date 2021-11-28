@@ -1,6 +1,7 @@
 package coordinator
 
 import (
+	"errors"
 	"sync"
 
 	"github.com/quarterblue/beehive/internal/job"
@@ -21,7 +22,7 @@ type Config struct {
 	Strategy Strategy
 }
 
-// Coordinator
+// Coordinator manages the worker nodes and distribute jobs using a balancing strategy
 type Coordinator struct {
 	mu          sync.RWMutex
 	config      Config
@@ -43,12 +44,16 @@ func NewNodeManager(strategy Strategy) Manager {
 	}
 }
 
-func NewCoordinator(cfg Config) *Coordinator {
+func NewCoordinator(cfg Config) (*Coordinator, error) {
+	manager := NewNodeManager(cfg.Strategy)
+	if manager != nil {
+		return nil, errors.New("no such balancing strategy exists")
+	}
 	return &Coordinator{
 		mu:          sync.RWMutex{},
 		config:      cfg,
-		nodeManager: nil,
-	}
+		nodeManager: manager,
+	}, nil
 }
 
 func (c *Coordinator) AddNode(node *node.Node) error {
@@ -77,15 +82,15 @@ func (c *Coordinator) AddNodesFromConfig() error {
 	return nil
 }
 
-type result struct {
-	msg string
-	err error
+type Result struct {
+	Msg string
+	Err error
 }
 
-func ScheduleJob(job job.DockerJob) result {
+func ScheduleJob(job job.DockerJob) Result {
 
-	return result{
-		msg: "",
-		err: nil,
+	return Result{
+		Msg: "",
+		Err: nil,
 	}
 }

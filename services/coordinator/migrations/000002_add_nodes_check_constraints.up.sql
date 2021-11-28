@@ -1,0 +1,1 @@
+ALTER TABLE nodes ADD CONSTRAINT nodes_jobcount_check CHECK (jobcount >= 0);

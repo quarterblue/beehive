@@ -15,14 +15,14 @@ import (
 const version = "1.0.1"
 
 type config struct {
-	port   int
-	env    string
-	dbUser string
-	dbPass string
+	port int
+	env  string
+	dsn  string
 }
 type application struct {
 	config config
 	logger *log.Logger
+	models Models
 }
 
 func Server() {
@@ -30,13 +30,12 @@ func Server() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
-	flag.StringVar(&cfg.dbUser, "user", "maxroach", "User name for DB")
-	flag.StringVar(&cfg.dbPass, "pass", "", "User pass for DB")
+	flag.StringVar(&cfg.dsn, "dsn", os.Getenv("BEEHIVE_DB_DSN"), "Database DSN")
 	flag.Parse()
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	db, err := sql.Open("postgres", "postgresql://maxroach@localhost:26257/bee_hive?sslmode=disable")
+	db, err := sql.Open("postgres", cfg.dsn)
 	if err != nil {
 		log.Fatal("error connecting to the database: ", err)
 	}
@@ -46,6 +45,7 @@ func Server() {
 	app := &application{
 		config: cfg,
 		logger: logger,
+		models: NewModels(db),
 	}
 
 	srv := &http.Server{

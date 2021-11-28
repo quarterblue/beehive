@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -14,9 +15,19 @@ var (
 )
 
 func (app *application) createNodeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "status: available")
-	fmt.Fprintf(w, "environment: %s\n", app.config.env)
-	fmt.Fprintf(w, "version: %s\n", version)
+	var input struct {
+		Name     string
+		IpAddr   string
+		Port     string
+		Jobcount int
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		return
+	}
+	fmt.Fprintf(w, "%+v\n", input)
 }
 
 func (app *application) editNodeHandler(w http.ResponseWriter, r *http.Request) {
@@ -59,6 +70,11 @@ type NodeModel struct {
 }
 
 func (n NodeModel) Insert(node *node.Node) error {
+
+	// query := `
+	// 	INSERT INTO nodes (name, year, runtime, genres)
+	// 	VALUES ($1, $2, $3, $4)
+	// 	RETURNING id, created_at, version`
 	return nil
 }
 
