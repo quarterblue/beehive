@@ -2,9 +2,9 @@ package api
 
 import (
 	"database/sql"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/quarterblue/beehive/internal/node"
@@ -16,53 +16,69 @@ var (
 
 func (app *application) createNodeHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Name     string
-		IpAddr   string
-		Port     string
-		Jobcount int
+		Name     string `json:"name"`
+		IpAddr   string `json:"ipaddr"`
+		Port     string `json:"port"`
+		Jobcount int    `json:"job_count"`
 	}
 
-	err := json.NewDecoder(r.Body).Decode(&input)
+	err := app.readJSON(w, r, &input)
 	if err != nil {
-		app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+		log.Println(err)
 		return
 	}
-	fmt.Fprintf(w, "%+v\n", input)
+
+	node := &node.Node{
+		Name:     input.Name,
+		IpAddr:   input.IpAddr,
+		Port:     input.Port,
+		JobCount: uint32(input.Jobcount),
+	}
+
+	err = app.models.Nodes.Insert(node)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	headers := make(http.Header)
+	headers.Set("Location", fmt.Sprintf("/v1/nodes/%d", node.ID))
+
+	err = app.writeJSON(w, http.StatusCreated, envelope{"node": node}, headers)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+
 }
 
-func (app *application) editNodeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "status: available")
-	fmt.Fprintf(w, "environment: %s\n", app.config.env)
-	fmt.Fprintf(w, "version: %s\n", version)
-}
+func (app *application) editNodeHandler(w http.ResponseWriter, r *http.Request) {}
 
 func (app *application) showNodeHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
+		app.notFoundResponse(w, r)
 		return
 	}
 
-	node := node.Node{
-		ID:       fmt.Sprint(id),
-		Name:     "practice",
-		IpAddr:   "127.39.10.2",
-		Port:     "3001",
-		JobCount: 0,
-		Spec:     nil,
+	node, err := app.models.Nodes.Get(id)
+	if err != nil {
+		switch {
+		case errors.Is(err, ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
 	}
 
 	err = app.writeJSON(w, http.StatusOK, envelope{"node": node}, nil)
 	if err != nil {
-		app.logger.Println(err)
-		http.Error(w, "There was a problem with your request.", http.StatusInternalServerError)
+		app.serverErrorResponse(w, r, err)
 	}
 }
 
 func (app *application) deleteNodeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "status: available")
-	fmt.Fprintf(w, "environment: %s\n", app.config.env)
-	fmt.Fprintf(w, "version: %s\n", version)
+
 }
 
 type NodeModel struct {
@@ -71,15 +87,46 @@ type NodeModel struct {
 
 func (n NodeModel) Insert(node *node.Node) error {
 
-	// query := `
-	// 	INSERT INTO nodes (name, year, runtime, genres)
-	// 	VALUES ($1, $2, $3, $4)
-	// 	RETURNING id, created_at, version`
-	return nil
+	query := `
+		INSERT INTO nodes (node_name, ipaddr, port, job_count)
+		VALUES ($1, $2, $3, $4)
+		RETURNING node_id`
+
+	args := []interface{}{node.Name, node.IpAddr, node.Port, node.JobCount}
+
+	return n.DB.QueryRow(query, args...).Scan(&node.ID)
 }
 
-func (n NodeModel) Get(node *node.Node) error {
-	return nil
+func (n NodeModel) Get(id int64) (*node.Node, error) {
+	if id < 1 {
+		return nil, ErrRecordNotFound
+	}
+
+	query := `
+        SELECT node_id, node_name, ipaddr, port, job_count
+        FROM nodes 
+        WHERE node_id = $1`
+
+	var node node.Node
+
+	err := n.DB.QueryRow(query, id).Scan(
+		&node.ID,
+		&node.Name,
+		&node.IpAddr,
+		&node.Port,
+		&node.JobCount,
+	)
+
+	if err != nil {
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			return nil, ErrRecordNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return &node, nil
 }
 
 func (n NodeModel) Update(node *node.Node) error {

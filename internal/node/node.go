@@ -2,12 +2,12 @@ package node
 
 // Represents the node specification
 type Node struct {
-	ID       string `json:"id"`
+	ID       int64  `json:"id"`
 	Name     string `json:"name"`
 	IpAddr   string `json:"ipadrr"`
 	Port     string `json:"port"`
 	JobCount uint32 `json:"jobcount"`
-	Spec     *Spec  `json:"spec"`
+	// Spec     *Spec  `json:"spec"`
 }
 
 // The machine specification
@@ -30,27 +30,21 @@ type Spec struct {
 }
 
 // Create a new node by fetching machine specfication information
-func NewNode(name, ipaddr, port string, spec *Spec) *Node {
+func NewNode(id int64, name, ipaddr, port string, spec *Spec) *Node {
 
 	node := &Node{
+		ID:       id,
 		Name:     name,
 		IpAddr:   ipaddr,
 		Port:     port,
 		JobCount: 0,
-		Spec:     spec,
+		// Spec:     spec,
 	}
 
 	return node
 }
 
-func NewSpec(mem, memalloc, disk, diskalloc uint64, os, plat, host string) *Spec {
-	return &Spec{
-		Memory:     mem,
-		MemoryFree: memalloc,
-		Disk:       disk,
-		DiskFree:   diskalloc,
-		OS:         os,
-		Platform:   plat,
-		Hostname:   host,
-	}
+// Converts IPv4 address and port to ipaddr:port format
+func AddrToID(addr, port string) string {
+	return addr + ":" + port
 }

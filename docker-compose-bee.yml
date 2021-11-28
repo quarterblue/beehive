@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  workerbee:
+    image: ./services/worker
+    container_name: workerbee
+  ports:
+    - '7881:7881'
+  volumes:
+    - ./services:/worker
+  env_file:
+    - worker.env

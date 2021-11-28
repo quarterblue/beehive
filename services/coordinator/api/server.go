@@ -28,19 +28,23 @@ type application struct {
 func Server() {
 	var cfg config
 
+	// Collect config variables via flags
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
 	flag.StringVar(&cfg.dsn, "dsn", os.Getenv("BEEHIVE_DB_DSN"), "Database DSN")
 	flag.Parse()
 
+	// Create a new logger
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
+	// Initialize db connection to cockroachdb using cfg dsn
 	db, err := sql.Open("postgres", cfg.dsn)
 	if err != nil {
 		log.Fatal("error connecting to the database: ", err)
 	}
 	defer db.Close()
-	fmt.Println("Database beehive_db opened and ready.")
+
+	fmt.Println("Connected to: Beehive CRDB.")
 
 	app := &application{
 		config: cfg,

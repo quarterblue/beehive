@@ -20,6 +20,3 @@ build_worker:
 
 run_worker:
 	./services/worker/${BINARY_NAME}
-
-# run:
-# 	./balancer

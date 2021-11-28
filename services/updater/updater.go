@@ -10,6 +10,4 @@ func NewUpdater() *Updater {
 	}
 }
 
-func (u *Updater) JobUpdate() {
-
-}
+func (u *Updater) JobUpdate() {}

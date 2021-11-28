@@ -1,5 +1,0 @@
-package coordinator
-
-func balance() {
-
-}

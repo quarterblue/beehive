@@ -1,0 +1,81 @@
+version: '3.9'
+
+volumes:
+  zksingle-ksingle_kafka1-data: null
+  zksingle-ksingle_zoo1-data: null
+  zksingle-ksingle_zoo1-log:
+
+    null
+services:
+  crdb_node_1:
+    container_name: crdb_node_1
+    image: cockroachdb/cockroach:latest
+    volumes:
+      - ./data/node_1:/cockroach/cockroach-data
+    # command: start --insecure
+    command: start-single-node --insecure
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    networks:
+      network_cockroachdb:
+        aliases:
+          - crdb_node_1
+  crdb_node_2:
+    container_name: crdb_node_2
+    image: cockroachdb/cockroach:latest
+    volumes:
+      - ./data/node_2:/cockroach/cockroach-data
+    command: start --insecure --join=crdb_node_1
+    networks:
+      network_cockroachdb:
+        aliases:
+          - crdb_node_2
+  zoo1:
+    image: confluentinc/cp-zookeeper:6.2.1
+    hostname: zoo1
+    container_name: zoo1
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zoo1:2888:3888
+    volumes:
+      - type: volume
+        source: zksingle-ksingle_zoo1-data
+        target: /data
+      - type: volume
+        source: zksingle-ksingle_zoo1-log
+        target: /datalog
+
+  kafka1:
+    image: confluentinc/cp-kafka:6.2.1
+    hostname: kafka1
+    user: "appuser:appuser"
+    ports:
+      - "9092:9092"
+      - "9999:9999"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHa\
+        ndler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
+    volumes:
+      - type: volume
+        source: zksingle-ksingle_kafka1-data
+        target: /var/lib/kafka/data
+    depends_on:
+      - zoo1
+
+networks:
+  network_cockroachdb:
+    driver: bridge

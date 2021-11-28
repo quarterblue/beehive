@@ -14,26 +14,20 @@ func TestSRoundRobinAdd(t *testing.T) {
 		nodes: make([]*node.Node, 10),
 	}
 
-	id := AddrToId("171.28.49.10", "3001")
-
 	nodeOne := &node.Node{
-		ID:       id,
+		ID:       2,
 		Name:     "nodeone",
 		IpAddr:   "171.28.49.10",
 		Port:     "3001",
 		JobCount: 0,
-		Spec:     nil,
 	}
 
-	idtwo := AddrToId("171.28.50.10", "3002")
-
 	nodeTwo := &node.Node{
-		ID:       idtwo,
+		ID:       3,
 		Name:     "nodetwo",
 		IpAddr:   "171.28.50.10",
 		Port:     "3002",
 		JobCount: 0,
-		Spec:     nil,
 	}
 
 	srr.Add(nodeOne)

@@ -21,15 +21,11 @@ type ParsedCron struct {
 	DayOfWeek  int
 }
 
-func (pc *ParsedCron) Next() {
-
-}
+func (pc *ParsedCron) Next() {}
 
 type CronParser struct{}
 
-func (cp *CronParser) ParseCron(cron string) {
-
-}
+func (cp *CronParser) ParseCron(cron string) {}
 
 func (cp *CronParser) ValidateCron(cron string) error {
 	cronSplit := strings.Split(cron, " ")
@@ -79,7 +75,6 @@ func (cp *CronParser) ValidateCron(cron string) error {
 	}
 
 	return nil
-
 }
 
 func ExistIn(element string, slice []string) (int, bool) {

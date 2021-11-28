@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  workerbee:
+    image: ./services/worker
+    container_name: workerbee
+  ports:
+    - '7881:7881'
+  volumes:
+    - ./services:/worker
+  env_file:
+    - worker.env
+
+  crdb_node:
+    container_name: crdb_node
+    image: cockroachdb/cockroach:latest
+    volumes:
+      - ./data/node:/cockroach/cockroach-data
+    # command: start --insecure
+    command: start-single-node --insecure
+    ports:
+      - "26257:26257"
+      - "8080:8080"

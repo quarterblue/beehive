@@ -24,6 +24,7 @@ const (
 
 type Job interface {
 	Execute() error
+	Stop() error
 }
 
 type DockerJob struct {
