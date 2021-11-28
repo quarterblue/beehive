@@ -51,8 +51,6 @@ func (app *application) createNodeHandler(w http.ResponseWriter, r *http.Request
 
 }
 
-func (app *application) editNodeHandler(w http.ResponseWriter, r *http.Request) {}
-
 func (app *application) showNodeHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := app.readIDParam(r)
 	if err != nil {
@@ -76,6 +74,8 @@ func (app *application) showNodeHandler(w http.ResponseWriter, r *http.Request) 
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *application) editNodeHandler(w http.ResponseWriter, r *http.Request) {}
 
 func (app *application) deleteNodeHandler(w http.ResponseWriter, r *http.Request) {
 

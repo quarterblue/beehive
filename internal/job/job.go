@@ -9,7 +9,6 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/google/uuid"
 )
 
 type State int
@@ -29,17 +28,17 @@ type Job interface {
 
 type DockerJob struct {
 	// Global unique ID to identify a docker job
-	ID         uuid.UUID
-	Name       string
-	State      State
-	Owner      string
-	CreateTime time.Time
-	StartTime  time.Time
-	FinishTime time.Time
+	ID             int64     `json:"id"`
+	Name           string    `json:"name"`
+	State          State     `json:"state"`
+	Owner          string    `json:"owner"`
+	CreateTime     time.Time `json:"created_time"`
+	LastStartTime  time.Time `json:"last_start_time"`
+	LastFinishTime time.Time `json:"last_finish_time"`
 }
 
 type JobEvent struct {
-	ID        uuid.UUID
+	ID        int64
 	State     State
 	Timestamp time.Time
 	DockerJob DockerJob

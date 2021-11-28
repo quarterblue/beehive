@@ -17,7 +17,7 @@ type Manager interface {
 
 type SRoundRobin struct {
 	mu    sync.Mutex
-	index uint64
+	index int
 	nodes []*node.Node
 }
 
@@ -61,7 +61,23 @@ func (srr *SRoundRobin) Remove(node *node.Node) error {
 }
 
 func (srr *SRoundRobin) Next(job *job.Job) (*node.Node, error) {
-	return nil, nil
+	srr.mu.Lock()
+	defer srr.mu.Lock()
+
+	if srr.index >= len(srr.nodes) {
+		srr.index = 0
+	}
+
+	node := &node.Node{
+		ID:     srr.nodes[srr.index].ID,
+		Name:   srr.nodes[srr.index].Name,
+		IpAddr: srr.nodes[srr.index].IpAddr,
+		Port:   srr.nodes[srr.index].Port,
+	}
+
+	srr.index++
+
+	return node, nil
 }
 
 type WRoundRobin struct {
