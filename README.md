@@ -20,7 +20,7 @@
 ## Systems Architecture
 
 <p align="center">
-        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/19039281bea6ffdc6f1fd5963405597825358fcb/static/systemdesigndiagram.svg?token=ANKI23KF75RZLWD4MTKJGADBUDGOW" alt="Parsec logo">
+        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/7373c2b51262b917af3892eba3890d2499bedacc/static/systemdesigndiagram.svg" alt="Parsec logo">
 </p>
 
 <b><a href="https://github.com/quarterblue/pulse">*Pulse<a></b>: is a hybrid failure detector library
