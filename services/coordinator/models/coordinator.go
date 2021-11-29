@@ -71,9 +71,9 @@ func (c *Coordinator) EditNode(node *node.Node) error {
 	return err
 }
 
-func (c *Coordinator) RemoveNode(node *node.Node) error {
+func (c *Coordinator) RemoveNode(id int64) error {
 	c.mu.Lock()
-	err := c.nodeManager.Remove(node)
+	err := c.nodeManager.Remove(id)
 	c.mu.Unlock()
 	return err
 }
