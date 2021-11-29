@@ -3,7 +3,7 @@
   beehive
 </h1>
 <p><a href="https://github.com/quarterblue/beehive/releases" target="_blank"><img src="https://img.shields.io/badge/version-v1.0.1-blue?style=flat-square&logo=none" alt="cli version" /></a>&nbsp;<a href="https://pkg.go.dev/github.com/quarterblue/beehive/v1?tab=doc" target="_blank"><img src="https://img.shields.io/badge/Go-1.17+-00ADD8?style=flat-square&logo=go" alt="go version" /></a>&nbsp;<img src="https://img.shields.io/badge/license-mit-blue?style=flat-square&logo=none" alt="license" /></p>
-<p>Distribute repeatable and periodic <b>cron based jobs</b> over hundreds of worker nodes by encapsulating jobs in <b>Docker Containers</b>. Coordinate worker nodes to redistribute jobs in case of crash failures. At-least-once-semnatics guarantee for all jobs scheduled using <b>beautiful and rich frontend UI</b>.</p>
+<p>Distribute repeatable and periodic <b>cron based jobs</b> over hundreds of worker nodes by encapsulating jobs in <b>Docker Containers</b>. Coordinate worker nodes to redistribute jobs in case of crash failures. At-least-once-semantics guarantee for all jobs scheduled using <b>beautiful and rich frontend UI</b>.</p>
 
 🚧 The project is a <b>work in progress</b>, expect bugs, safety issues, and components that don't work. Refer to Todo list for progress.
 
@@ -20,7 +20,7 @@
 ## Systems Architecture
 
 <p align="center">
-        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/19039281bea6ffdc6f1fd5963405597825358fcb/static/systemdesigndiagram.svg?token=ANKI23KF75RZLWD4MTKJGADBUDGOW" alt="Parsec logo">
+        <img width="100%" src="https://raw.githubusercontent.com/quarterblue/beehive/7373c2b51262b917af3892eba3890d2499bedacc/static/systemdesigndiagram.svg" alt="Parsec logo">
 </p>
 
 <b><a href="https://github.com/quarterblue/pulse">*Pulse<a></b>: is a hybrid failure detector library
