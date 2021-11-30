@@ -5,7 +5,6 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/quarterblue/beehive/internal/job"
 	"github.com/quarterblue/beehive/internal/node"
 )
 
@@ -13,7 +12,7 @@ type Manager interface {
 	Add(*node.Node) error
 	Edit(*node.Node) error
 	Remove(id int64) error
-	Next(*job.Job) (*node.Node, error)
+	Next() (*node.Node, error)
 }
 
 type SRoundRobin struct {
@@ -61,7 +60,7 @@ func (srr *SRoundRobin) Remove(id int64) error {
 	return errors.New("no such node exists")
 }
 
-func (srr *SRoundRobin) Next(job *job.Job) (*node.Node, error) {
+func (srr *SRoundRobin) Next() (*node.Node, error) {
 	srr.mu.Lock()
 	defer srr.mu.Lock()
 
@@ -96,12 +95,19 @@ type LoadSpec struct {
 	Quality Quality
 }
 type WRoundRobin struct {
-	high   []*node.Node
-	medium []*node.Node
-	low    []*node.Node
-	hSpec  LoadSpec
-	mSpec  LoadSpec
-	lSpec  LoadSpec
+	high     []*node.Node
+	medium   []*node.Node
+	low      []*node.Node
+	specList []LoadSpec
+}
+
+func NewWRR(lSpec, mSpec, hSpec LoadSpec) *WRoundRobin {
+	return &WRoundRobin{
+		high:     make([]*node.Node, 0),
+		medium:   make([]*node.Node, 0),
+		low:      make([]*node.Node, 0),
+		specList: []LoadSpec{lSpec, mSpec, hSpec},
+	}
 }
 
 func (wrr *WRoundRobin) Add(node *node.Node) error {
@@ -116,7 +122,7 @@ func (wrr *WRoundRobin) Remove(id int64) error {
 	return nil
 }
 
-func (wrr *WRoundRobin) Next(job *job.Job) (*node.Node, error) {
+func (wrr *WRoundRobin) Next() (*node.Node, error) {
 	return nil, nil
 }
 
@@ -144,8 +150,8 @@ func (l *LJobs) Add(node *node.Node) error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	l.nodes = append(l.nodes, node)
-	// Keep the list always sorted
-	sort.Sort(l)
+	// Keep the list always sorted in descending order.
+	sort.Sort(sort.Reverse(l))
 	return nil
 }
 
@@ -166,8 +172,18 @@ func (l *LJobs) Remove(id int64) error {
 	return errors.New("no such node exists")
 }
 
-func (lj *LJobs) Next(job *job.Job) (*node.Node, error) {
-	return nil, nil
+// Next returns the node with least jobs, which we pop from end of the slice
+// Since the slice is always sorted in descending job order
+func (l *LJobs) Next() (*node.Node, error) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	var i int
+	if i = len(l.nodes) - 1; i <= -1 {
+		return nil, errors.New("empty job list")
+	}
+	x := l.nodes[i]
+	l.nodes = append(l.nodes[:i], l.nodes[i+1:]...)
+	return x, nil
 }
 
 type CHash struct {
@@ -185,7 +201,7 @@ func (ch *CHash) Remove(id int64) error {
 	return nil
 }
 
-func (ch *CHash) Next(job *job.Job) (*node.Node, error) {
+func (ch *CHash) Next() (*node.Node, error) {
 	return nil, nil
 }
 

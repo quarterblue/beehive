@@ -103,6 +103,53 @@ func TestLJobsEdit(t *testing.T) {
 }
 
 func TestLJobsRemove(t *testing.T) {
+	l := &LJobs{
+		mu:    sync.Mutex{},
+		nodes: make([]*node.Node, 0),
+	}
+
+	nodeOne := &node.Node{
+		ID:       1,
+		Name:     "testnodeOne",
+		IpAddr:   "182.10.2.30",
+		Port:     "3001",
+		JobCount: 7,
+	}
+
+	nodeTwo := &node.Node{
+		ID:       2,
+		Name:     "testnodeTwo",
+		IpAddr:   "182.10.2.31",
+		Port:     "3001",
+		JobCount: 2,
+	}
+
+	nodeThree := &node.Node{
+		ID:       3,
+		Name:     "testnodeThree",
+		IpAddr:   "182.10.2.32",
+		Port:     "3001",
+		JobCount: 6,
+	}
+
+	nodeFour := &node.Node{
+		ID:       4,
+		Name:     "testnodeFour",
+		IpAddr:   "182.10.2.33",
+		Port:     "3001",
+		JobCount: 0,
+	}
+
+	l.Add(nodeOne)
+	l.Add(nodeTwo)
+	l.Add(nodeThree)
+	node, err := l.Next()
+	if err != nil {
+		t.Errorf("test failed")
+	}
+	log.Println(node)
+
+	l.Add(nodeFour)
 
 }
 func TestLJobsNext(t *testing.T) {
