@@ -11,6 +11,13 @@ import (
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
+var (
+	ErrHost error = errors.New("machine spec: could not fetch host information")
+	ErrDisk error = errors.New("machine spec: could not fetch disk information")
+	ErrMem  error = errors.New("machine spec: could not fetch memory information")
+	ErrCpu  error = errors.New("machine spec: could not fetch cpu information")
+)
+
 func ByteCountSI(b uint64) string {
 	const unit = 1000
 	if b < unit {
@@ -26,29 +33,25 @@ func ByteCountSI(b uint64) string {
 }
 
 func retrieveSpec() (*pb.SpecResponse, error) {
-	hostErr := errors.New("machine spec: could not fetch host information")
-	diskErr := errors.New("machine spec: could not fetch disk information")
-	memErr := errors.New("machine spec: could not fetch memory information")
-	cpuErr := errors.New("machine spec: could not fetch cpu information")
 
 	hInfo, err := host.Info()
 	if err != nil {
-		return nil, hostErr
+		return nil, ErrHost
 	}
 
 	diskStat, err := disk.Usage("/")
 	if err != nil {
-		return nil, diskErr
+		return nil, ErrDisk
 	}
 
 	v, err := mem.VirtualMemory()
 	if err != nil {
-		return nil, memErr
+		return nil, ErrMem
 	}
 
 	cpu, err := cpu.Info()
 	if err != nil {
-		return nil, cpuErr
+		return nil, ErrCpu
 	}
 
 	cpuCount := uint64(len(cpu))

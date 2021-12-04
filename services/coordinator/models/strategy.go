@@ -8,6 +8,12 @@ import (
 	"github.com/quarterblue/beehive/internal/node"
 )
 
+var (
+	ErrNoNode   error = errors.New("no such node exists")
+	ErrSameId   error = errors.New("node with same identifier already exists")
+	ErrEmptyJob error = errors.New("empty job list")
+)
+
 type Manager interface {
 	Add(*node.Node) error
 	Edit(*node.Node) error
@@ -15,6 +21,7 @@ type Manager interface {
 	Next() (*node.Node, error)
 }
 
+// Implementation of Simple Round Robin load balancer
 type SRoundRobin struct {
 	mu    sync.Mutex
 	index int
@@ -26,7 +33,7 @@ func (srr *SRoundRobin) Add(node *node.Node) error {
 	defer srr.mu.Unlock()
 	for _, n := range srr.nodes {
 		if n.ID == node.ID {
-			return errors.New("node with the same identifier already exists")
+			return ErrSameId
 		}
 	}
 	srr.nodes = append(srr.nodes, node)
@@ -44,7 +51,7 @@ func (srr *SRoundRobin) Edit(node *node.Node) error {
 		}
 	}
 
-	return errors.New("no such node exists")
+	return ErrNoNode
 }
 
 func (srr *SRoundRobin) Remove(id int64) error {
@@ -57,7 +64,7 @@ func (srr *SRoundRobin) Remove(id int64) error {
 		}
 	}
 
-	return errors.New("no such node exists")
+	return ErrNoNode
 }
 
 func (srr *SRoundRobin) Next() (*node.Node, error) {
@@ -88,29 +95,26 @@ const (
 	qLow
 )
 
-type LoadSpec struct {
-	CPUMhz  float64
-	Memory  uint64
-	Disk    uint64
-	Quality Quality
-}
+// Implementation of Weighted (machine performance) Round Robin load balancer
 type WRoundRobin struct {
 	high     []*node.Node
 	medium   []*node.Node
 	low      []*node.Node
-	specList []LoadSpec
+	specList []node.LoadSpec
 }
 
-func NewWRR(lSpec, mSpec, hSpec LoadSpec) *WRoundRobin {
+func NewWRR(lSpec, mSpec, hSpec node.LoadSpec) *WRoundRobin {
 	return &WRoundRobin{
 		high:     make([]*node.Node, 0),
 		medium:   make([]*node.Node, 0),
 		low:      make([]*node.Node, 0),
-		specList: []LoadSpec{lSpec, mSpec, hSpec},
+		specList: []node.LoadSpec{lSpec, mSpec, hSpec},
 	}
 }
 
 func (wrr *WRoundRobin) Add(node *node.Node) error {
+	// for spec := range wrr.specList {
+	// }
 	return nil
 }
 
@@ -126,6 +130,7 @@ func (wrr *WRoundRobin) Next() (*node.Node, error) {
 	return nil, nil
 }
 
+// Implements least jobs load balancer
 type LJobs struct {
 	mu    sync.Mutex
 	nodes []*node.Node
@@ -156,6 +161,16 @@ func (l *LJobs) Add(node *node.Node) error {
 }
 
 func (l *LJobs) Edit(node *node.Node) error {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	for i, n := range l.nodes {
+		if n.ID == node.ID {
+			l.nodes[i] = node
+			break
+		}
+	}
+	// Keep the list always sorted in descending order.
+	sort.Sort(sort.Reverse(l))
 	return nil
 }
 
@@ -169,7 +184,7 @@ func (l *LJobs) Remove(id int64) error {
 		}
 	}
 
-	return errors.New("no such node exists")
+	return ErrNoNode
 }
 
 // Next returns the node with least jobs, which we pop from end of the slice
@@ -186,6 +201,7 @@ func (l *LJobs) Next() (*node.Node, error) {
 	return x, nil
 }
 
+// Implements consistent hashing with bounded loads, load balancer
 type CHash struct {
 }
 
@@ -204,6 +220,8 @@ func (ch *CHash) Remove(id int64) error {
 func (ch *CHash) Next() (*node.Node, error) {
 	return nil, nil
 }
+
+// Util functions
 
 func RemoveIndex(s []*node.Node, index int) []*node.Node {
 	return append(s[:index], s[index+1:]...)

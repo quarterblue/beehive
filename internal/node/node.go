@@ -1,5 +1,20 @@
 package node
 
+type Quality int
+
+const (
+	qHigh Quality = iota
+	qMedium
+	qLow
+)
+
+type LoadSpec struct {
+	CPUMhz  float64
+	Memory  uint64
+	Disk    uint64
+	Quality Quality
+}
+
 // Represents the node specification
 type Node struct {
 	ID       int64  `json:"id"`
@@ -42,6 +57,10 @@ func NewNode(id int64, name, ipaddr, port string, spec *Spec) *Node {
 	}
 
 	return node
+}
+
+func (node *Node) calcQuality(specList []LoadSpec) Quality {
+	return qHigh
 }
 
 // Converts IPv4 address and port to ipaddr:port format
